@@ -4,13 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>滇之行｜暑期支教之旅</title>
-<!-- Google Font -->
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-<!-- CDN 依赖 -->
+
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="https://cdn.jsdelivr.net/npm/framer-motion@11/dist/framer-motion.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@studio-freight/lenis@1.0.42/bundled/lenis.min.js"></script>
@@ -27,52 +26,47 @@ tailwind.config = {
 }
 </script>
 
-<style type="text/tailwindcss">
-@layer utilities {
-  .content-auto { content-visibility: auto; }
-}
-body { background:#000; color:#fff; }
+<style>
+body { background:#000; color:#fff; margin:0; overflow-x:hidden; }
+img { display:block; }
 </style>
 </head>
 <body>
 
 <!-- Hero 全屏区域 -->
-<section class="h-screen w-full flex flex-col justify-center items-center px-6">
-  <div id="hero-title" class="font-playfair text-5xl md:text-7xl lg:text-8xl tracking-wide opacity-0 translate-y-8">滇之行</div>
-  <div id="hero-sub" class="mt-4 text-md md:text-xl text-white/70 tracking-widest opacity-0">暑期支教之旅</div>
-  <div id="scroll-hint" class="absolute bottom-10 opacity-0">
+<section class="h-screen w-full flex flex-col justify-center items-center px-6 relative">
+  <div id="hero-title" class="font-playfair text-5xl md:text-7xl lg:text-8xl tracking-wide">滇之行</div>
+  <div id="hero-sub" class="mt-4 text-md md:text-xl text-white/70 tracking-widest">暑期支教之旅</div>
+  <div id="scroll-hint" class="absolute bottom-10">
     <div class="w-px h-14 bg-white/30 mx-auto"></div>
+    <p class="text-xs text-white/40 text-center mt-2 tracking-widest">SCROLL</p>
   </div>
 </section>
 
-<!-- 主分屏区域：左侧章节索引｜右侧横向滚动图片带 -->
+<!-- 主分屏区域 -->
 <section id="scroll-wrap" class="h-screen w-full flex overflow-hidden">
-  <!-- 左侧 sticky 章节索引 -->
+  <!-- 左侧章节索引 -->
   <div class="w-1/3 h-full flex flex-col justify-center px-8 md:px-16 border-r border-white/10">
-    <div id="chapter-list" class="space-y-8 md:space-y-12">
-      <!-- JS 动态渲染章节 -->
-    </div>
+    <div id="chapter-list" class="space-y-8 md:space-y-12"></div>
   </div>
 
   <!-- 右侧横向滚动图片容器 -->
-  <div class="w-2/3 h-full overflow-hidden flex items-center">
-    <div id="horizontal-track" class="flex gap-6 md:gap-8 pl-4">
-      <!-- JS 动态渲染图片卡片 -->
-    </div>
+  <div id="gallery-viewport" class="w-2/3 h-full overflow-hidden flex items-center">
+    <div id="horizontal-track" class="flex gap-6 md:gap-8 pl-4 items-center"></div>
   </div>
 </section>
 
 <!-- 结尾页 -->
 <footer class="min-h-screen bg-black flex flex-col justify-center items-center px-6">
   <p class="font-playfair text-3xl md:text-5xl text-white/80">End of Journal</p>
-  <p class="mt-4 text-white/40">Yunnan Summer Volunteer Trip</p>
+  <p class="mt-4 text-white/40 tracking-widest">YUNNAN SUMMER VOLUNTEER TRIP</p>
 </footer>
 
+
 <script>
-const { gsap, ScrollTrigger, Lenis, motion } = window;
 gsap.registerPlugin(ScrollTrigger);
 
-// ========== 在这里修改你的章节与图片链接 ==========
+// ========== 你的图片直链填这里 ==========
 const chapters = [
   {
     id: "shuangbai",
@@ -80,9 +74,9 @@ const chapters = [
     title: "山野与晚风",
     images: [
       "https://tuchuang.voooe.cn/image/3b21aa5acd44be9e3ee13a419b2834ad.69leh",
-      "IMAGE_URL_2",
-      "IMAGE_URL_3",
-      "IMAGE_URL_4"
+      "你的图片链接2",
+      "你的图片链接3",
+      "你的图片链接4"
     ]
   },
   {
@@ -90,10 +84,10 @@ const chapters = [
     label: "02 妥甸",
     title: "支教日常",
     images: [
-      "IMAGE_URL_5",
-      "IMAGE_URL_6",
-      "IMAGE_URL_7",
-      "IMAGE_URL_8"
+      "你的图片链接5",
+      "你的图片链接6",
+      "你的图片链接7",
+      "你的图片链接8"
     ]
   },
   {
@@ -101,9 +95,9 @@ const chapters = [
     label: "03 归途",
     title: "云边回望",
     images: [
-      "IMAGE_URL_9",
-      "IMAGE_URL_10",
-      "IMAGE_URL_11"
+      "你的图片链接9",
+      "你的图片链接10",
+      "你的图片链接11"
     ]
   }
 ];
@@ -112,84 +106,146 @@ let activeChapterIndex = 0;
 const chapterListEl = document.getElementById('chapter-list');
 const horizontalTrackEl = document.getElementById('horizontal-track');
 
-// 渲染左侧章节列表
+// 渲染左侧章节
 chapters.forEach((ch, idx) => {
   const div = document.createElement('div');
-  div.className = "cursor-pointer group chapter-item";
+  div.className = "cursor-pointer group chapter-item transition-all duration-300";
   div.dataset.index = idx;
   div.innerHTML = `
     <div class="font-playfair">
-      <div class="text-sm tracking-widest text-white/50 chapter-label">${ch.label}</div>
-      <h2 class="text-2xl md:text-4xl mt-1 group-hover:text-white transition-colors chapter-title">${ch.title}</h2>
+      <div class="text-sm tracking-widest text-white/50">${ch.label}</div>
+      <h2 class="text-2xl md:text-4xl mt-1 group-hover:text-white transition-colors">${ch.title}</h2>
     </div>
   `;
   chapterListEl.appendChild(div);
 });
 
-// 渲染右侧横向图片卡片
+// 渲染右侧图片卡片（先不设 src，等加载控制）
+const allImages = [];
 chapters.forEach(ch => {
   ch.images.forEach(imgSrc => {
     const card = document.createElement('div');
-    card.className = "w-[280px] md:w-[420px] h-[65vh] flex-shrink-0 overflow-hidden rounded-sm";
-    card.innerHTML = `
-      <img src="${imgSrc}" alt="photo" class="w-full h-full object-cover scale-[1.1] hover:scale-105 transition-transform duration-300" />
-    `;
+    card.className = "w-[280px] md:w-[420px] h-[65vh] flex-shrink-0 overflow-hidden rounded-sm bg-white/5";
+    const img = document.createElement('img');
+    img.src = imgSrc;
+    img.alt = "photo";
+    img.className = "w-full h-full object-cover transition-transform duration-500 hover:scale-105";
+    img.loading = "lazy";
+    img.onerror = function() {
+      console.warn("图片加载失败:", imgSrc);
+      this.parentElement.style.background = "#333";
+    };
+    card.appendChild(img);
     horizontalTrackEl.appendChild(card);
-  })
-})
+    allImages.push(img);
+  });
+});
 
 // Hero 入场动画
-gsap.fromTo("#hero-title", {opacity:0, y:30}, {opacity:1, y:0, duration:1.2});
-gsap.fromTo("#hero-sub", {opacity:0}, {opacity:0.75, delay:0.6, duration:1});
-gsap.fromTo("#scroll-hint", {opacity:0}, {opacity:1, delay:1.2});
+gsap.from("#hero-title", {opacity:0, y:30, duration:1.2});
+gsap.from("#hero-sub", {opacity:0, delay:0.6, duration:1});
+gsap.from("#scroll-hint", {opacity:0, delay:1.2, duration:1});
 
-// Lenis 平滑滚动
+// Lenis 平滑滚动 + 与 ScrollTrigger 联动（关键修复！）
 const lenis = new Lenis({
-  duration:1.4,
+  duration: 1.4,
   easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-  smoothWheel:true
+  smoothWheel: true
 });
-function raf(time){ lenis.raf(time); requestAnimationFrame(raf); }
-requestAnimationFrame(raf);
 
-// GSAP：垂直滚动驱动横向画廊
-const scrollWrap = document.getElementById("scroll-wrap");
-const track = document.getElementById("horizontal-track");
-const scrollLength = track.scrollWidth - window.innerWidth * 0.66;
+// 把 Lenis 的滚动事件同步给 ScrollTrigger
+lenis.on('scroll', ScrollTrigger.update);
 
-const tl = gsap.timeline({
-  scrollTrigger:{
-    trigger: scrollWrap,
-    pin:true,
-    scrub:1.2,
-    end: `+=${scrollLength}`,
-    onUpdate:self => {
-      const progress = self.progress;
-      activeChapterIndex = Math.min(chapters.length -1, Math.floor(progress * chapters.length));
-      updateChapterHighlight();
-    }
+// 用 gsap.ticker 驱动 Lenis（而不是 requestAnimationFrame）
+gsap.ticker.add((time) => {
+  lenis.raf(time * 1000);
+});
+gsap.ticker.lagSmoothing(0);
+
+// 等所有图片加载完成后再初始化横向滚动（关键修复！）
+function initHorizontalScroll() {
+  const scrollWrap = document.getElementById("scroll-wrap");
+  const track = document.getElementById("horizontal-track");
+  const viewport = document.getElementById("gallery-viewport");
+
+  // 用右侧容器的实际宽度计算，而不是 window.innerWidth * 0.66
+  const scrollLength = track.scrollWidth - viewport.clientWidth;
+
+  if (scrollLength <= 0) {
+    console.warn("滚动距离为0，图片可能未加载或数量不足");
+    return;
   }
-})
-tl.to(track, {x: -scrollLength, ease:"none"});
 
-// 更新左侧章节高亮
-function updateChapterHighlight(){
-  const items = document.querySelectorAll(".chapter-item");
-  items.forEach((el, idx)=>{
-    if(idx === activeChapterIndex){
-      gsap.to(el, {opacity:1, x:8, duration:0.4});
-    }else{
-      gsap.to(el, {opacity:0.35, x:0, duration:0.4});
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: scrollWrap,
+      pin: true,
+      scrub: 1,
+      end: `+=${scrollLength}`,
+      onUpdate: self => {
+        const progress = self.progress;
+        activeChapterIndex = Math.min(
+          chapters.length - 1,
+          Math.floor(progress * chapters.length)
+        );
+        updateChapterHighlight();
+      }
     }
-  })
+  });
+
+  tl.to(track, { x: -scrollLength, ease: "none" });
+
+  // 初始高亮
+  updateChapterHighlight();
 }
 
-// 清理
-window.addEventListener('beforeunload', ()=>{
-  ScrollTrigger.getAll().forEach(t=>t.kill());
-  tl.kill();
-  lenis.destroy();
-})
+function updateChapterHighlight() {
+  const items = document.querySelectorAll(".chapter-item");
+  items.forEach((el, idx) => {
+    if (idx === activeChapterIndex) {
+      gsap.to(el, { opacity: 1, x: 8, duration: 0.4 });
+    } else {
+      gsap.to(el, { opacity: 0.35, x: 0, duration: 0.4 });
+    }
+  });
+}
+
+// 等待图片加载（最多等5秒，防止某张图卡死）
+let loadedCount = 0;
+const totalImages = allImages.length;
+const timeoutMs = 5000;
+const startTime = Date.now();
+
+function checkAllLoaded() {
+  loadedCount++;
+  if (loadedCount >= totalImages || Date.now() - startTime > timeoutMs) {
+    initHorizontalScroll();
+    return true;
+  }
+  return false;
+}
+
+allImages.forEach(img => {
+  if (img.complete) {
+    checkAllLoaded();
+  } else {
+    img.onload = checkAllLoaded;
+    img.onerror = checkAllLoaded; // 加载失败也继续，不阻塞初始化
+  }
+});
+
+// 兜底：5秒后无论如何都初始化
+setTimeout(() => {
+  if (loadedCount < totalImages) {
+    console.warn("部分图片未加载完成，强制初始化");
+    initHorizontalScroll();
+  }
+}, timeoutMs);
+
+// 窗口大小变化时刷新
+window.addEventListener('resize', () => {
+  ScrollTrigger.refresh();
+});
 </script>
 </body>
 </html>
